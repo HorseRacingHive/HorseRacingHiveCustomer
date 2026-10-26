@@ -266,9 +266,9 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 .lock { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   background: radial-gradient(520px 340px at 50% 18%, rgba(247,201,72,.28), transparent 70%), var(--comb); color: var(--comb-ink); }
 .lock-card { width: 100%; max-width: 410px; display: grid; justify-items: center; gap: 10px; text-align: center; }
-.lock-brand { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 88px; }
-.lock-logo { display: block; width: auto; height: 82px; object-fit: contain; filter: drop-shadow(0 0 14px rgba(242,169,59,.18)); }
-.lock-brand-en { font-family: "Cinzel", "Times New Roman", serif; font-weight: 700; font-size: 17px; letter-spacing: .28em;
+.lock-brand { display: grid; justify-items: center; gap: 8px; }
+.lock-logo { display: block; width: auto; height: 112px; object-fit: contain; filter: drop-shadow(0 0 14px rgba(242,169,59,.18)); }
+.lock-brand-en { font-family: "Cinzel", "Times New Roman", serif; font-weight: 700; font-size: 17px; letter-spacing: .2em;
   line-height: 1; white-space: nowrap; margin-left: 4px;
   background: linear-gradient(180deg, #fff3c4 0%, #f7c948 38%, #c9861a 62%, #ffe08a 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.8)); }
@@ -289,9 +289,9 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 
 <div class="lock" id="lock">
   <div class="lock-card">
-    <div class="lock-brand" aria-label="HORSE RACING">
-      <img class="lock-logo" src="hive_logo.png?v=2" alt="HIVE">
-      <span class="lock-brand-en">HORSE RACING</span>
+    <div class="lock-brand" aria-label="HORSE RACING AI HIVE">
+      <img class="lock-logo" src="hive_logo.png?v=3" alt="HIVE">
+      <span class="lock-brand-en">HORSE RACING AI HIVE</span>
     </div>
     <p class="lock-sub">合言葉を入れると、今週の予想が見られます</p>
     <form id="lockForm" autocomplete="off">
