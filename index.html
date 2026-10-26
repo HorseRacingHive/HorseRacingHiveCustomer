@@ -9,7 +9,7 @@
 <title>競馬AI HIVE</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
 <style>
 /* 黒い巣(ヘッダー・タブ)に金の蜜。中身はクリーム色の紙に、六角形のバッジで印と★を示す */
 :root {
@@ -60,23 +60,36 @@ button { font: inherit; color: inherit; }
 header.top {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; color: var(--comb-ink);
   background: radial-gradient(260px 90px at 60px 0, rgba(247,201,72,.25), transparent 70%), linear-gradient(180deg, #1f170b, var(--comb));
-  border-bottom: 3px solid var(--honey);
+  border-bottom: 3px solid var(--honey); transition: transform .18s ease;
 }
+header.top.scroll-hidden { transform: translateY(calc(-100% - 12px)); }
 header.top::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: -11px; height: 9px; pointer-events: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='10'%3E%3Cpath d='M0 0H160V1C150 1 149 9 145 9S141 1 134 1H86C80 1 80 6 77 6S74 1 68 1H34C28 1 28 8 24 8S20 1 14 1H0Z' fill='%23f7c948'/%3E%3C/svg%3E") 0 0 / 160px 10px repeat-x;
 }
 .top-row { display: flex; align-items: center; gap: 10px; height: 54px; }
-.logo { width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 0 0 1px rgba(247,201,72,.5); background: var(--honey); object-fit: cover; }
-.brand { font-family: var(--f-disp); font-weight: 900; font-size: 19px; color: var(--honey); letter-spacing: .04em; line-height: 1; }
-.brand small { display: block; font-size: 10px; font-weight: 700; color: rgba(251,241,220,.65); letter-spacing: .12em; margin-top: 3px; }
+.logo { width: 36px; height: 36px; flex: none; object-fit: contain; }
+.brand { font-family: var(--f-disp); font-weight: 900; font-size: 13px; color: var(--honey); letter-spacing: .2em; line-height: 1; white-space: nowrap; }
 .top-right { margin-left: auto; text-align: right; font-size: 11px; color: rgba(251,241,220,.72); line-height: 1.3; }
 .top-right b { color: var(--honey); font-weight: 700; }
 .refresh { margin-left: 6px; width: 36px; height: 36px; border-radius: 10px; border: 1px solid rgba(247,201,72,.35); background: rgba(247,201,72,.08); color: var(--honey); display: grid; place-items: center; }
 .refresh svg { width: 18px; height: 18px; }
 .refresh.spin svg { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+@media (max-width: 640px) {
+  .wrap { padding-left: max(10px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+  .top-row { height: 76px; gap: 6px; overflow: hidden; }
+  .logo { width: auto; height: 70px; margin-left: 0; }
+  .brand { font-size: 12px; letter-spacing: .2em; }
+  .top-right { font-size: 10px; }
+  .refresh { width: 32px; height: 32px; }
+}
+.day-nav { display: grid; gap: 6px; padding-bottom: 8px; }
+.day-nav-tools { display: flex; align-items: center; gap: 6px; }
+.day-step { flex: none; min-height: 34px; padding: 3px 10px; border: 1px solid rgba(247,201,72,.3); border-radius: 999px; background: rgba(247,201,72,.08); color: var(--honey); font-size: 12px; font-weight: 700; }
+.day-step:disabled { opacity: .4; }
+.day-picker { min-width: 0; min-height: 34px; padding: 3px 8px; border: 1px solid rgba(247,201,72,.3); border-radius: 999px; background: rgba(247,201,72,.08); color: var(--honey); font: inherit; font-size: 12px; color-scheme: dark; }
+.days { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
 .days::-webkit-scrollbar { display: none; }
 .day { flex: none; padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(247,201,72,.3); color: rgba(251,241,220,.8); background: transparent; font-size: 13px; font-weight: 600; }
 .day.on { background: linear-gradient(135deg, var(--honey), var(--amber)); color: var(--comb); border-color: transparent; }
@@ -130,6 +143,25 @@ h2 .sub { margin-left: auto; font-family: var(--f-body); font-size: 12px; font-w
 .summary span { display: block; font-size: 11px; color: var(--muted); font-weight: 600; }
 .summary b { font-family: var(--f-disp); font-size: 20px; font-weight: 900; }
 .summary b.plus { color: var(--good); } .summary b.minus { color: var(--bad); }
+.day-nav-top { display: flex; align-items: flex-start; gap: 12px; }
+.day-nav { min-width: 0; flex: 1; display: grid; gap: 6px; padding-bottom: 8px; }
+.day-nav-tools { flex: none; }
+.weather-row { min-width: 0; flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.weather-card { min-width: 0; min-height: 72px; padding: 8px 10px; }
+.weather-card .weather-place { display: block; font-size: 11px; font-weight: 700; color: var(--muted); }
+.weather-card b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--f-disp); font-size: 16px; font-weight: 900; }
+.weather-card small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 10px; }
+@media (max-width: 420px) {
+  .weather-row { gap: 5px; }
+  .weather-card { padding: 8px 6px; }
+  .weather-card b { font-size: 14px; }
+  .weather-card small { font-size: 9px; }
+}
+@media (max-width: 760px) {
+  .day-nav-top { align-items: stretch; flex-direction: column; gap: 0; }
+  .weather-row { flex: none; }
+}
+@media (prefers-reduced-motion: reduce) { header.top { transition: none; } }
 .next { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--comb); color: var(--comb-ink); border: 0; border-radius: var(--r); width: 100%; text-align: left; }
 .next .cd { font-family: var(--f-disp); font-weight: 900; font-size: 26px; color: var(--honey); line-height: 1; min-width: 72px; }
 .next .cd small { display: block; font-size: 10px; color: rgba(251,241,220,.6); font-weight: 700; margin-top: 4px; }
@@ -187,6 +219,15 @@ h2 .sub { margin-left: auto; font-family: var(--f-body); font-size: 12px; font-w
 .sheet { position: fixed; inset: 0; z-index: 40; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
 .sheet-head { position: sticky; top: 0; z-index: 2; background: var(--comb); color: var(--comb-ink); padding-top: env(safe-area-inset-top, 0px); border-bottom: 3px solid var(--honey); }
 .sheet-head .wrap { display: flex; align-items: center; gap: 10px; min-height: 58px; }
+.detail-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.detail-nav button { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 5px 9px; color: var(--ink); font-size: 12px; font-weight: 700; }
+.detail-nav button:disabled { opacity: .4; }
+.detail-nav span { color: var(--muted); font-size: 11px; }
+.horse-sort { display: flex; overflow-x: auto; gap: 0; margin: 10px 0 4px; border-bottom: 1px solid var(--line); scrollbar-width: none; }
+.horse-sort::-webkit-scrollbar { display: none; }
+.horse-sort button { flex: none; min-height: 42px; border: 0; border-bottom: 2px solid transparent; padding: 10px 9px; background: none; color: var(--muted); font-size: 13px; font-weight: 800; white-space: nowrap; }
+.horse-sort button.on { color: var(--accent); border-bottom-color: var(--accent); }
+.horse-sort button.on::after { content: "（" attr(data-direction) "）"; font-size: 10px; }
 .back { border: 0; background: rgba(247,201,72,.12); color: var(--honey); width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; flex: none; }
 .back svg { width: 20px; height: 20px; }
 .sheet-title { min-width: 0; }
@@ -224,9 +265,13 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .lock { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   background: radial-gradient(520px 340px at 50% 18%, rgba(247,201,72,.28), transparent 70%), var(--comb); color: var(--comb-ink); }
-.lock-card { width: 100%; max-width: 360px; display: grid; justify-items: center; gap: 10px; text-align: center; }
-.lock-logo { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 0 0 2px rgba(247,201,72,.55), 0 10px 40px rgba(247,201,72,.25); }
-.lock h1 { margin: 6px 0 0; font-family: var(--f-disp); font-weight: 900; font-size: 30px; color: var(--honey); letter-spacing: .04em; }
+.lock-card { width: 100%; max-width: 410px; display: grid; justify-items: center; gap: 10px; text-align: center; }
+.lock-brand { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 88px; }
+.lock-logo { display: block; width: auto; height: 82px; object-fit: contain; filter: drop-shadow(0 0 14px rgba(242,169,59,.18)); }
+.lock-brand-en { font-family: "Cinzel", "Times New Roman", serif; font-weight: 700; font-size: 17px; letter-spacing: .28em;
+  line-height: 1; white-space: nowrap; margin-left: 4px;
+  background: linear-gradient(180deg, #fff3c4 0%, #f7c948 38%, #c9861a 62%, #ffe08a 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.8)); }
 .lock-sub { margin: 0; font-size: 14px; color: rgba(251,241,220,.78); }
 #lockForm { width: 100%; display: grid; gap: 12px; margin-top: 14px; }
 #pw { width: 100%; font-size: 18px; padding: 14px 16px; border-radius: 14px; border: 2px solid rgba(247,201,72,.45); background: rgba(255,255,255,.06); color: #fff; text-align: center; letter-spacing: .08em; }
@@ -244,8 +289,10 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 
 <div class="lock" id="lock">
   <div class="lock-card">
-    <img class="lock-logo" src="icon.png" alt="" onerror="this.style.visibility='hidden'">
-    <h1>競馬AI HIVE</h1>
+    <div class="lock-brand" aria-label="HORSE RACING">
+      <img class="lock-logo" src="hive_logo.png?v=2" alt="HIVE">
+      <span class="lock-brand-en">HORSE RACING</span>
+    </div>
     <p class="lock-sub">合言葉を入れると、今週の予想が見られます</p>
     <form id="lockForm" autocomplete="off">
       <label for="pw" class="vh">合言葉</label>
@@ -262,14 +309,24 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 <header class="top">
   <div class="wrap">
     <div class="top-row">
-      <img class="logo" src="icon.png" alt="" onerror="this.style.visibility='hidden'">
-      <div class="brand">競馬AI HIVE<small>みんなの予想</small></div>
+      <img class="logo" src="hive_logo.png?v=2" alt="" onerror="this.style.visibility='hidden'">
+      <div class="brand">HORSE RACING</div>
       <div class="top-right" id="stamp"></div>
       <button class="refresh" id="refresh" aria-label="最新にする">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
       </button>
     </div>
-    <div class="days" id="days"></div>
+    <div class="day-nav-top">
+      <div class="day-nav">
+        <div class="day-nav-tools">
+          <button class="day-step" data-day-step="-1" aria-label="前の開催日">‹ 前</button>
+          <input class="day-picker" id="day-picker" type="date" aria-label="開催日を選択">
+          <button class="day-step" data-day-step="1" aria-label="次の開催日">次 ›</button>
+        </div>
+        <div class="days" id="days"></div>
+      </div>
+      <div class="weather-row" id="weather" aria-label="当日の天気と馬場"></div>
+    </div>
   </div>
 </header>
 <main class="wrap" id="view"></main>
@@ -287,11 +344,27 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 "use strict";
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let lastHeaderScrollY = window.scrollY;
+window.addEventListener("scroll", () => {
+  const header = $("header.top");
+  const y = Math.max(0, window.scrollY);
+  if (!header) return;
+  if (y > 32 && y > lastHeaderScrollY) {
+    header.classList.add("scroll-hidden");
+  } else if (y < lastHeaderScrollY || y <= 32) {
+    header.classList.remove("scroll-hidden");
+  }
+  lastHeaderScrollY = y;
+}, { passive: true });
+window.addEventListener("resize", () => {
+  lastHeaderScrollY = window.scrollY;
+});
 const pct = (p, d = 1) => p == null ? "—" : (p * 100).toFixed(d) + "%";
 const evf = e => e == null ? "—" : e.toFixed(2);
 const starStr = n => n ? "★".repeat(n) + "☆".repeat(5 - n) : "";
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} }, del(k) { try { localStorage.removeItem(k); } catch {} } };
-const S = { pw: null, snap: null, demo: false, date: null, tab: store.get("hivep_tab") || "home", sig: "狙い", venue: null };
+const S = { pw: null, snap: null, demo: false, date: null, tab: store.get("hivep_tab") || "home", sig: "狙い", venue: null,
+  detailNav: [], detailNavGroup: "race", detailRaceId: null, detailSort: { key: "no", direction: "asc" } };
 
 /* ---------------------------------------------------------------- 合言葉で開く */
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -361,8 +434,29 @@ function tick() { document.querySelectorAll("[data-cd]").forEach(el => { el.text
 /* ---------------------------------------------------------------- 描画 */
 function renderDays() {
   $("#days").innerHTML = S.snap.days.map(d => `<button class="day ${d.date === S.date ? "on" : ""} ${d.date < todayStr() ? "past" : ""}" data-date="${d.date}">${esc(d.label)}</button>`).join("");
+  const dates = S.snap.days.map(d => d.date);
+  const index = dates.indexOf(S.date);
+  const picker = $("#day-picker");
+  picker.value = S.date || "";
+  picker.min = dates[0] || "";
+  picker.max = dates[dates.length - 1] || "";
+  document.querySelector('[data-day-step="-1"]').disabled = index <= 0;
+  document.querySelector('[data-day-step="1"]').disabled = index < 0 || index >= dates.length - 1;
+  renderWeather();
   const u = S.snap.updated ? S.snap.updated.slice(11, 16) : "";
   $("#stamp").innerHTML = S.demo ? "見本データ" : `更新 <b>${esc(u)}</b>`;
+}
+function renderWeather() {
+  const el = $("#weather");
+  const day = curDay();
+  const weatherIcon = { "晴": "☀️", "曇": "☁️", "雨": "☔", "小雨": "🌦️", "雪": "❄️", "小雪": "🌨️" };
+  const venues = day?.baba || [];
+  el.innerHTML = venues.length ? venues.map(x => `<div class="card weather-card">
+    <span class="weather-place">${esc(x.venue)}</span>
+    <b>${x.tenko ? `${weatherIcon[x.tenko] || ""} ${esc(x.tenko)}` : "天気未発表"}</b>
+    <small>芝 ${esc(x.shiba || "—")} / ダ ${esc(x.dirt || "—")}</small>
+    <small>${x.time ? `${esc(x.time)} 発表・予想に反映` : "馬場発表待ち"}</small>
+  </div>`).join("") : "";
 }
 function allHorses(day) {
   const out = [];
@@ -389,7 +483,7 @@ function viewHome(d) {
   const up = os.filter(x => x.fin == null && postDate(x.post) > Date.now()).sort((a, b) => postDate(a.post) - postDate(b.post));
   if (up.length) {
     const n = up[0];
-    h += `<button class="next" data-race="${esc(n.id)}"><div class="cd num"><span data-cd="${esc(n.post)}"></span><small>次のおすすめまで</small></div>
+    h += `<button class="next" data-race="${esc(n.id)}" data-race-group="upcoming"><div class="cd num"><span data-cd="${esc(n.post)}"></span><small>次のおすすめまで</small></div>
       <div class="what">${esc(n.venue)}${n.no}R ${esc(n.post)}発走<b>${n.hno ?? ""} ${esc(n.name)}</b><span class="stars">${starStr(n.st)}</span></div></button>`;
   }
   const done = os.filter(x => x.fin != null), hits = done.filter(x => x.fin === 1).length;
@@ -400,7 +494,7 @@ function viewHome(d) {
     <div><span>単勝回収率</span><b class="${d.perf?.roi == null ? "" : d.perf.roi >= 1 ? "plus" : "minus"}">${d.perf?.roi == null ? "—" : Math.round(d.perf.roi * 100) + "%"}</b></div></section>`;
   h += `<section><h2>おすすめ ★4〜5<span class="sub">${esc(d.label)}</span></h2>`;
   h += os.length ? `<div class="picks">${os.map(x => `
-    <button class="pick s${x.st} ${x.fin != null ? (x.fin === 1 ? "done-hit" : "done-miss") : ""}" data-race="${esc(x.id)}">
+    <button class="pick s${x.st} ${x.fin != null ? (x.fin === 1 ? "done-hit" : "done-miss") : ""}" data-race="${esc(x.id)}" data-race-group="osusume">
       <div class="where"><span class="stars">${starStr(x.st)}</span><span>${esc(x.venue)}${x.no}R</span><span>${esc(x.post)}発走</span>
         <span class="t">${x.fin != null ? finPill(x.fin) : `<span class="pill wait" data-cd="${esc(x.post)}" data-fallback="結果待ち"></span>`}</span></div>
       <span class="hex m1">${x.hno ?? "—"}</span>
@@ -409,6 +503,14 @@ function viewHome(d) {
     </button>`).join("")}</div>`
     : `<div class="card empty">${d.date < todayStr() ? "この日の★4以上はありませんでした" : "当日の朝、オッズが出ると表示されます"}</div>`;
   h += `</section><p class="note">期待値は「AIの勝率 × 単勝の払戻」の見込みです。1.0を超えるほど長い目で見て得な馬です。予想は発走まで変わることがあります。</p>`;
+  const results = (d.venues || []).flatMap(v => (v.races || []).filter(r => r.done).map(r => ({ ...r, venue: v.venue })));
+  h += `<section><h2>${esc(d.label)} の全レース結果</h2>`;
+  h += results.length ? `<div class="card list">${results.map(r => `<button class="row" data-race="${esc(r.id)}" data-race-group="results">
+    <div class="when num"><b>${r.no}R</b>${esc(r.venue)} ${esc(r.post || "")}</div>
+    <div class="main"><b>${esc(r.name || "")}</b><span class="why">${r.horses.filter(x => x.fin != null).sort((a, b) => a.fin - b.fin).slice(0, 3)
+      .map(x => `${x.fin}着 ${x.mark || "—"} ${x.no ?? ""} ${esc(x.name)}`).join("　")}</span></div>
+    <div class="right">結果</div></button>`).join("")}</div>` : `<div class="card empty">この日の確定結果はまだありません</div>`;
+  h += `</section>`;
   return h;
 }
 
@@ -420,7 +522,7 @@ function viewSig(d) {
     <p class="note" style="margin:0">${SIG_INFO[S.sig][1]}</p>`;
   const list = pick(S.sig);
   if (!list.length) return h + `<div class="card empty">この日の「${esc(S.sig)}」はありません</div>`;
-  return h + `<div class="card list">` + list.map(x => `<button class="row" data-race="${esc(x.id)}">
+  return h + `<div class="card list">` + list.map(x => `<button class="row" data-race="${esc(x.id)}" data-race-group="sig:${esc(S.sig)}">
     <div class="when num"><b>${esc(x.post || "")}</b>${esc(x.venue)}${x.rno}R</div>
     <div class="main"><b>${x.no ?? ""} ${esc(x.name)}</b>${x.mark ? ` <span class="hex ${markCls(x.mark)}" style="width:22px;height:20px;font-size:11px">${esc(x.mark)}</span>` : ""}
       ${x.fin != null ? ` <span class="fin ${x.fin <= 3 ? "f" + x.fin : ""}">${x.fin}着</span>` : ""}
@@ -439,7 +541,7 @@ function viewRaces(d) {
     const line = r.done
       ? `結果 ${[1, 2, 3].map(p => (r.horses.find(h => h.fin === p) || {}).mark || "無").join("-")}　1着 ${esc((r.horses.find(h => h.fin === 1) || {}).name || "")}`
       : marks.map(h => `${h.mark}${h.no ?? ""}${esc(h.name)}`).join(" ");
-    return `<button class="race" data-race="${esc(r.id)}"><span class="rno ${r.done ? "past" : ""}">${r.no}R</span>
+    return `<button class="race" data-race="${esc(r.id)}" data-race-group="race"><span class="rno ${r.done ? "past" : ""}">${r.no}R</span>
       <div class="info"><b>${esc(r.name)}</b><small>${esc(r.course)} ${r.field ?? ""}頭${r.going ? " ・" + esc(r.going) : ""}</small><span class="marks">${line}</span></div>
       <div class="side"><div class="post num">${esc(r.post)}</div>${r.st ? `<span class="stars">${"★".repeat(r.st)}</span>` : ""}</div></button>`;
   }).join("") + `</div>`;
@@ -451,13 +553,13 @@ function viewPerf(d) {
     <div><span>結果が出た</span><b>${p.n ?? 0}</b></div><div><span>的中</span><b>${p.n ? p.hit : "—"}</b></div>
     <div><span>的中率</span><b>${p.n ? Math.round(p.hit / p.n * 100) + "%" : "—"}</b></div>
     <div><span>回収率</span><b class="${p.roi == null ? "" : p.roi >= 1 ? "plus" : "minus"}">${p.roi == null ? "—" : Math.round(p.roi * 100) + "%"}</b></div></div></section>`;
-  if (d.marks && d.marks.rows.length) h += `<section><h2>印の成績<span class="sub">${d.marks.races}レース</span></h2><div class="card tbl"><table>
+  if (d.marks && d.marks.rows.length) h += `<section><h2>印の成績<span class="sub">全${d.marks.races}レース</span></h2><div class="card tbl"><table>
     <tr><th>印</th><th class="r">頭数</th><th class="r">勝率</th><th class="r">3着内</th></tr>
     ${d.marks.rows.map(r => `<tr><td><span class="hex ${markCls(r.m)}" style="width:24px;height:21px;font-size:12px">${esc(r.m)}</span></td><td class="r">${r.n}</td><td class="r">${pct(r.win / r.n, 0)}</td><td class="r">${pct(r.top3 / r.n, 0)}</td></tr>`).join("")}
     </table></div></section>`;
   const g = S.snap.star_guide || {};
   const ks = Object.keys(g).sort((a, b) => b - a);
-  if (ks.length) h += `<section><h2>★の目安<span class="sub">過去の検証</span></h2><div class="card tbl"><table>
+  if (ks.length) h += `<section><h2>★ごとの過去成績<span class="sub">単勝・過去の検証</span></h2><div class="card tbl"><table>
     <tr><th>おすすめ度</th><th class="r">単勝回収率</th><th class="r">的中率</th></tr>
     ${ks.map(k => `<tr><td><span class="stars">${starStr(+k)}</span> <small class="note">${esc(g[k].label)}</small></td><td class="r ${g[k].roi >= 1 ? "plus" : "minus"}">${Math.round(g[k].roi * 100)}%</td><td class="r">${pct(g[k].hit, 0)}</td></tr>`).join("")}
     </table></div><p class="note">過去の成績は将来の結果を約束するものではありません。連敗が続くこともあるので、1回の金額は少なめに。</p></section>`;
@@ -465,17 +567,64 @@ function viewPerf(d) {
 }
 
 /* ---------------------------------------------------------------- レース詳細 */
-function openRace(id) {
+function publicRaceSequence(group) {
+  const d = curDay(), venues = d?.venues || [];
+  if (group === "race") {
+    const venue = venues.find(item => item.venue === S.venue) || venues[0];
+    return venue ? venue.races.map(race => race.id) : [];
+  }
+  if (group === "osusume" || group === "upcoming") {
+    const list = d?.osusume || [];
+    return (group === "osusume" ? list : list.filter(x => x.fin == null && postDate(x.post) > Date.now())
+      .sort((a, b) => postDate(a.post) - postDate(b.post))).map(item => item.id);
+  }
+  if (group === "results") return venues.flatMap(v => v.races.filter(r => r.done).map(r => r.id));
+  if (group.startsWith("sig:")) {
+    const sig = group.slice(4);
+    const rows = allHorses(d).filter(h => sig === "紐" ? h.himo : h.sig === sig)
+      .sort((a, b) => (a.post || "").localeCompare(b.post || "", "ja", { numeric: true }));
+    return [...new Set(rows.map(row => row.id))];
+  }
+  return [];
+}
+function publicDetailNav(id) {
+  const index = S.detailNav.indexOf(id);
+  if (index < 0 || S.detailNav.length < 2) return "";
+  return `<div class="detail-nav"><button data-detail-step="-1" ${index === 0 ? "disabled" : ""}>‹ 前のレース</button>
+    <span>${index + 1} / ${S.detailNav.length}</span><button data-detail-step="1" ${index === S.detailNav.length - 1 ? "disabled" : ""}>次のレース ›</button></div>`;
+}
+function openRace(id, group = "race", isStep = false) {
   const d = curDay(); let r, venue;
   for (const v of d.venues) { const x = v.races.find(rr => rr.id === id); if (x) { r = x; venue = v.venue; } }
   if (!r) return;
+  S.detailRaceId = id;
+  if (!isStep) {
+    S.detailNavGroup = group;
+    S.detailNav = publicRaceSequence(group);
+    if (!S.detailNav.includes(id)) S.detailNav = [id];
+    S.detailSort = { key: "no", direction: "asc" };
+  }
   const sh = $("#sheet"); sh.hidden = false; document.body.style.overflow = "hidden";
-  try { history.pushState({ sheet: 1 }, ""); } catch {}
+  if (!isStep) { try { history.pushState({ sheet: 1 }, ""); } catch {} }
+  const sortKeys = [["no", "馬番"], ["p", "勝率"], ["odds", "オッズ"], ["ev", "期待値"]];
+  if (r.done) sortKeys.push(["fin", "着順"]);
+  const { key, direction } = S.detailSort;
+  const sortedHorses = [...r.horses].sort((a, b) => {
+    const av = a[key], bv = b[key];
+    if (av == null || bv == null) return av == null ? (bv == null ? 0 : 1) : -1;
+    const delta = Number(av) - Number(bv);
+    return (delta * (direction === "asc" ? 1 : -1)) || Number(a.no) - Number(b.no);
+  });
   const maxP = Math.max(...r.horses.map(x => x.p || 0), 0.01);
-  let h = `<div class="sheet-head"><div class="wrap"><button class="back" id="back" aria-label="もどる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  let h = `<div class="sheet-head"><div class="wrap"><button class="back" id="back" aria-label="閉じる" title="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <div class="sheet-title"><b>${esc(venue)}${r.no}R ${esc(r.name)}</b><small>${esc(r.post)}発走 ・ ${esc(r.course)} ・ ${r.field ?? ""}頭${r.going ? " ・ " + esc(r.going) : ""}</small></div></div></div>
+    ${publicDetailNav(id)}
     <div class="wrap"><div class="horses">${r.ai ? "" : `<div class="note">オッズが出る前なので、能力だけのAI勝率です。★・期待値は当日に出ます。</div>`}`;
-  for (const x of r.horses) {
+  h += `<div class="horse-sort">${sortKeys.map(([sortKey, label]) => {
+    const active = key === sortKey;
+    return `<button data-public-sort="${sortKey}" class="${active ? "on" : ""}" data-direction="${active ? (direction === "asc" ? "昇順" : "降順") : ""}">${label}</button>`;
+  }).join("")}</div>`;
+  for (const x of sortedHorses) {
     const tags = [];
     if (x.st) tags.push(`<span class="stars">${starStr(x.st)}</span>`);
     if (x.sig === "狙い") tags.push(`<span class="pill aim">狙い</span>`);
@@ -485,7 +634,7 @@ function openRace(id) {
     h += `<div class="horse ${x.st >= 4 ? "buy" : ""} ${x.fin === 1 ? "won" : ""}">
       <span class="waku w${x.fr || 0}">${x.no ?? "—"}</span><span class="hex ${markCls(x.mark)}">${esc(x.mark)}</span>
       <div class="nm"><b>${esc(x.name)}</b></div>
-      <div class="od num">${x.fin != null ? `<span class="fin ${x.fin <= 3 ? "f" + x.fin : ""}">${x.fin}着</span>` : ""}</div>
+      <div class="od num">${x.odds != null ? `<b>${Number(x.odds).toFixed(Number(x.odds) >= 100 ? 0 : 1)}</b><small>倍</small>` : ""}${x.fin != null ? `<span class="fin ${x.fin <= 3 ? "f" + x.fin : ""}">${x.fin}着</span>` : ""}</div>
       <div class="bar"><span class="num" style="min-width:64px">勝率 ${pct(x.p)}</span><span class="meter"><i style="width:${Math.round((x.p || 0) / maxP * 100)}%"></i></span>
         ${x.ev != null ? `<span class="num ${x.ev >= 1.1 ? "ev-hi" : ""}">期待値 ${evf(x.ev)}</span>` : ""}</div>
       ${tags.length ? `<div class="bar">${tags.join(" ")}</div>` : ""}</div>`;
@@ -500,12 +649,40 @@ $("#lockForm").addEventListener("submit", e => { e.preventDefault(); unlock($("#
 document.addEventListener("click", e => {
   const t = e.target.closest("button"); if (!t || t.closest("form")) return;
   if (t.id === "back") { try { history.back(); } catch {} closeSheet(); return; }
+  if (t.dataset.detailStep) {
+    const index = S.detailNav.indexOf(S.detailRaceId);
+    const id = S.detailNav[index + Number(t.dataset.detailStep)];
+    if (id) openRace(id, S.detailNavGroup, true);
+    return;
+  }
   if (t.id === "refresh") { refresh(); return; }
   if (t.dataset.tab) { S.tab = t.dataset.tab; store.set("hivep_tab", S.tab); render(); window.scrollTo(0, 0); return; }
   if (t.dataset.date) { S.date = t.dataset.date; renderDays(); render(); return; }
+  if (t.dataset.dayStep) {
+    const dates = S.snap.days.map(d => d.date), index = dates.indexOf(S.date);
+    const next = dates[index + Number(t.dataset.dayStep)];
+    if (next) { S.date = next; renderDays(); render(); }
+    return;
+  }
   if (t.dataset.sig) { S.sig = t.dataset.sig; render(); return; }
   if (t.dataset.venue) { S.venue = t.dataset.venue; render(); return; }
-  if (t.dataset.race) { openRace(t.dataset.race); return; }
+  if (t.dataset.publicSort) {
+    const key = t.dataset.publicSort;
+    S.detailSort = { key, direction: S.detailSort.key === key ? (S.detailSort.direction === "asc" ? "desc" : "asc") : (key === "no" || key === "fin" ? "asc" : "desc") };
+    const currentId = S.detailRaceId;
+    if (currentId) openRace(currentId, S.detailNavGroup, true);
+    return;
+  }
+  if (t.dataset.race) { openRace(t.dataset.race, t.dataset.raceGroup || "race"); return; }
+});
+document.addEventListener("change", e => {
+  if (e.target.id !== "day-picker" || !e.target.value || !S.snap?.days.length) return;
+  const picked = Date.parse(e.target.value + "T00:00:00");
+  const nearest = S.snap.days.reduce((best, day) => {
+    const distance = Math.abs(Date.parse(day.date + "T00:00:00") - picked);
+    return distance < best.distance ? { date: day.date, distance } : best;
+  }, { date: S.snap.days[0].date, distance: Infinity }).date;
+  S.date = nearest; renderDays(); render();
 });
 setInterval(tick, 1000);
 setInterval(() => { if (!document.hidden && S.pw) refresh(); }, 3 * 60 * 1000);
